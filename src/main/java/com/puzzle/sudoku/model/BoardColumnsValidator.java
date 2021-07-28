@@ -1,5 +1,6 @@
 package com.puzzle.sudoku.model;
 
+import com.puzzle.sudoku.util.BoardUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,13 +19,16 @@ public class BoardColumnsValidator implements BoardValidator{
         for(int i=0;i<noOfColumns;i++){
             Set<Integer> set = new HashSet<>();
             for(int j = 0;j<noOfRows;j++){
-                if(set.contains(board.getBoard().get(j).get(i))) {
-                    log.info("Failed for" + this.getClass().getName() + " with coordinates " + i + " " + j);
-                    return false;
-                }else
-                    set.add(board.getBoard().get(j).get(i));
+                if(!BoardUtils.isBlankCell(board,j, i)) {
+                    if (set.contains(board.getBoard().get(j).get(i))) {
+                        log.info("Failed for" + this.getClass().getName() + " with coordinates " + i + " " + j);
+                        return false;
+                    } else
+                        set.add(board.getBoard().get(j).get(i));
+                }
             }
         }
         return true;
     }
+
 }

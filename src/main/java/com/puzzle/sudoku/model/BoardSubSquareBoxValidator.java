@@ -1,5 +1,6 @@
 package com.puzzle.sudoku.model;
 
+import com.puzzle.sudoku.util.BoardUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -29,11 +30,13 @@ public class BoardSubSquareBoxValidator implements BoardValidator{
         Set<Integer> set = new HashSet<>();
         for(int i=startI;i<endI;i++){
             for(int j=startJ;j<endJ;j++){
-                if(set.contains(board.get(i).get(j))) {
-                    log.info("Failed for +"+this.getClass().getName()+" with coordinates "+ i +" " + j);
-                    return false;
-                }else
-                    set.add(board.get(i).get(j));
+                if(!BoardUtils.isBlankCell(board, i, j)) {
+                    if (set.contains(board.get(i).get(j))) {
+                        log.info("Failed for +" + this.getClass().getName() + " with coordinates " + i + " " + j);
+                        return false;
+                    } else
+                        set.add(board.get(i).get(j));
+                }
 
             }
         }
